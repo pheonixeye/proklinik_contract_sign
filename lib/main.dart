@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:proklinik_contract_sign/core/localization/app_localizations.dart';
 import 'package:proklinik_contract_sign/providers/_main.dart';
 import 'package:proklinik_contract_sign/router/router.dart';
 import 'package:proklinik_contract_sign/utils/utils_keys.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await initializeDateFormatting('ar');
   runApp(const AppProvider());
 }
 

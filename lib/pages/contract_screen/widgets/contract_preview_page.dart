@@ -20,11 +20,13 @@ class _ContractPreviewPageState extends State<ContractPreviewPage> {
         padding: const EdgeInsets.all(8.0),
         child: PdfPreview(
           allowSharing: false,
-          dpi: 72,
+          dpi: 144,
           loadingWidget: const CentralLoading(),
           useActions: false,
-          build: (context) {
-            return PdfContract(widget.doctor).createContract(context);
+          build: (context) async {
+            // ignore: no_leading_underscores_for_local_identifiers
+            final _contract = await PdfContract(widget.doctor).init();
+            return _contract.createContract(context);
           },
         ),
       ),

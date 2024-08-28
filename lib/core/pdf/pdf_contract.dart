@@ -1,11 +1,14 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers
 
 import 'dart:typed_data';
+import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:proklinik_contract_sign/assets/assets.dart';
+import 'package:proklinik_contract_sign/core/pdf/page_four.dart';
 import 'package:proklinik_contract_sign/core/pdf/page_one.dart';
+import 'package:proklinik_contract_sign/core/pdf/page_three.dart';
 import 'package:proklinik_contract_sign/core/pdf/page_two.dart';
 import 'package:proklinik_models/models/doctor.dart';
 
@@ -58,6 +61,9 @@ class PdfContract {
     return this;
   }
 
+  final String _signatureDate =
+      DateFormat('dd/MM/yyyy', 'ar').format(DateTime.now());
+
   final doc = pw.Document();
 
   Future<Uint8List> createContract(PdfPageFormat context) async {
@@ -71,6 +77,7 @@ class PdfContract {
       subTitleStyle: _subTitleStyle,
       containerColor: _containerColor,
       containerHeight: _containerHeight,
+      signatureDate: _signatureDate,
     );
 
     final page2 = createPageTwo(
@@ -83,10 +90,39 @@ class PdfContract {
       subTitleStyle: _subTitleStyle,
       containerColor: _containerColor,
       containerHeight: _containerHeight,
+      signatureDate: _signatureDate,
+    );
+
+    final page3 = createPageThree(
+      context: context,
+      image: image,
+      doctor: doctor,
+      logoStyle: _logoStyle,
+      textStyle: _textStyle,
+      titleStyle: _titleStyle,
+      subTitleStyle: _subTitleStyle,
+      containerColor: _containerColor,
+      containerHeight: _containerHeight,
+      signatureDate: _signatureDate,
+    );
+
+    final page4 = createPageFour(
+      context: context,
+      image: image,
+      doctor: doctor,
+      logoStyle: _logoStyle,
+      textStyle: _textStyle,
+      titleStyle: _titleStyle,
+      subTitleStyle: _subTitleStyle,
+      containerColor: _containerColor,
+      containerHeight: _containerHeight,
+      signatureDate: _signatureDate,
     );
 
     doc.addPage(page1);
     doc.addPage(page2);
+    doc.addPage(page3);
+    doc.addPage(page4);
 
     return doc.save();
   }

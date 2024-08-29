@@ -50,6 +50,8 @@ dependencies:
       url: https://github.com/pheonixeye/proklinik_models.git
       ref: master
   printing: ^5.13.2
+  http_parser: ^4.0.2
+  http: ^1.2.2
 
 dev_dependencies:
   flutter_test:

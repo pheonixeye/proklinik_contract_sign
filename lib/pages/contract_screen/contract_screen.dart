@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:proklinik_contract_sign/pages/contract_screen/widgets/contract_preview_page.dart';
+import 'package:proklinik_contract_sign/pages/contract_screen/widgets/signed_contract_preview_page.dart';
 import 'package:proklinik_contract_sign/providers/px_contract_fetch.dart';
 import 'package:proklinik_contract_sign/widgets/central_loading.dart';
 import 'package:provider/provider.dart';
@@ -15,10 +16,11 @@ class ContractScreen extends StatelessWidget {
           body: switch (c.state) {
             ContractPageState.loading => const CentralLoading(),
             ContractPageState.error => const Center(
-                child: Text('خطأ'),
+                child: Text('خطأ'), //TODO
               ),
-            ContractPageState.loaded =>
+            ContractPageState.loadedUnSigned =>
               ContractPreviewPage(doctor: c.data!.doctor),
+            ContractPageState.loadedSigned => const SignedContractPreviewPage(),
           },
         );
       },

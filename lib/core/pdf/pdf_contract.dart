@@ -10,15 +10,18 @@ import 'package:proklinik_contract_sign/core/pdf/page_four.dart';
 import 'package:proklinik_contract_sign/core/pdf/page_one.dart';
 import 'package:proklinik_contract_sign/core/pdf/page_three.dart';
 import 'package:proklinik_contract_sign/core/pdf/page_two.dart';
+import 'package:proklinik_contract_sign/models/contract_signature_result.dart';
 import 'package:proklinik_models/models/doctor.dart';
 
 class PdfContract {
   final Doctor doctor;
   PdfContract(this.doctor);
 
-  late final pw.TtfFont ttf;
+  late final pw.Font ttf;
 
   late final pw.ImageProvider image;
+
+  late final pw.ImageProvider signatureImage;
 
   late final _logoStyle = pw.TextStyle(
     font: ttf,
@@ -55,8 +58,9 @@ class PdfContract {
   );
 
   Future<PdfContract> init() async {
-    ttf = await fontFromAssetBundle(AppAssets.cairoFont);
+    ttf = await PdfGoogleFonts.cairoMedium();
     image = await imageFromAssetBundle(AppAssets.appLogo);
+    signatureImage = await imageFromAssetBundle(AppAssets.signature);
 
     return this;
   }
@@ -64,9 +68,13 @@ class PdfContract {
   final String _signatureDate =
       DateFormat('dd/MM/yyyy', 'ar').format(DateTime.now());
 
-  final doc = pw.Document();
+  final unsignedContract = pw.Document();
+  final signedContract = pw.Document();
 
-  Future<Uint8List> createContract(PdfPageFormat context) async {
+  Future<Uint8List> signContract(
+    PdfPageFormat context,
+    ContractSignatureResult? result,
+  ) async {
     final page1 = createPageOne(
       context: context,
       image: image,
@@ -78,6 +86,8 @@ class PdfContract {
       containerColor: _containerColor,
       containerHeight: _containerHeight,
       signatureDate: _signatureDate,
+      signatureImage: signatureImage,
+      result: result,
     );
 
     final page2 = createPageTwo(
@@ -91,6 +101,8 @@ class PdfContract {
       containerColor: _containerColor,
       containerHeight: _containerHeight,
       signatureDate: _signatureDate,
+      signatureImage: signatureImage,
+      result: result,
     );
 
     final page3 = createPageThree(
@@ -104,6 +116,8 @@ class PdfContract {
       containerColor: _containerColor,
       containerHeight: _containerHeight,
       signatureDate: _signatureDate,
+      signatureImage: signatureImage,
+      result: result,
     );
 
     final page4 = createPageFour(
@@ -117,13 +131,80 @@ class PdfContract {
       containerColor: _containerColor,
       containerHeight: _containerHeight,
       signatureDate: _signatureDate,
+      signatureImage: signatureImage,
+      result: result,
     );
 
-    doc.addPage(page1);
-    doc.addPage(page2);
-    doc.addPage(page3);
-    doc.addPage(page4);
+    signedContract.addPage(page1);
+    signedContract.addPage(page2);
+    signedContract.addPage(page3);
+    signedContract.addPage(page4);
 
-    return doc.save();
+    return signedContract.save();
+  }
+
+  Future<Uint8List> createContract(PdfPageFormat context) async {
+    final page1 = createPageOne(
+      context: context,
+      image: image,
+      doctor: doctor,
+      logoStyle: _logoStyle,
+      textStyle: _textStyle,
+      titleStyle: _titleStyle,
+      subTitleStyle: _subTitleStyle,
+      containerColor: _containerColor,
+      containerHeight: _containerHeight,
+      signatureDate: _signatureDate,
+      signatureImage: signatureImage,
+    );
+
+    final page2 = createPageTwo(
+      context: context,
+      image: image,
+      doctor: doctor,
+      logoStyle: _logoStyle,
+      textStyle: _textStyle,
+      titleStyle: _titleStyle,
+      subTitleStyle: _subTitleStyle,
+      containerColor: _containerColor,
+      containerHeight: _containerHeight,
+      signatureDate: _signatureDate,
+      signatureImage: signatureImage,
+    );
+
+    final page3 = createPageThree(
+      context: context,
+      image: image,
+      doctor: doctor,
+      logoStyle: _logoStyle,
+      textStyle: _textStyle,
+      titleStyle: _titleStyle,
+      subTitleStyle: _subTitleStyle,
+      containerColor: _containerColor,
+      containerHeight: _containerHeight,
+      signatureDate: _signatureDate,
+      signatureImage: signatureImage,
+    );
+
+    final page4 = createPageFour(
+      context: context,
+      image: image,
+      doctor: doctor,
+      logoStyle: _logoStyle,
+      textStyle: _textStyle,
+      titleStyle: _titleStyle,
+      subTitleStyle: _subTitleStyle,
+      containerColor: _containerColor,
+      containerHeight: _containerHeight,
+      signatureDate: _signatureDate,
+      signatureImage: signatureImage,
+    );
+
+    unsignedContract.addPage(page1);
+    unsignedContract.addPage(page2);
+    unsignedContract.addPage(page3);
+    unsignedContract.addPage(page4);
+
+    return unsignedContract.save();
   }
 }

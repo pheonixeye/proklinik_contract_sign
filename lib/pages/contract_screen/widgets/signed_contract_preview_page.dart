@@ -22,29 +22,27 @@ class _SignedContractPreviewPageState extends State<SignedContractPreviewPage> {
     return Consumer<PxContractFetch>(
       builder: (context, c, _) {
         final Future<Uint8List> contractFileBytes = c.fetchPdfFromUri();
+        while (c.signedContractUrl == null) {
+          return const CentralLoading();
+        }
         return Scaffold(
           body: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Builder(
-              builder: (context) {
-                while (c.signedContractUrl == null) {
-                  return const CentralLoading();
+            child: FutureBuilder<Uint8List>(
+              future: contractFileBytes,
+              builder: (context, snapshot) {
+                while (!snapshot.hasData) {
+                  return const CentralLoading(
+                    loadingText: 'جاري تحميل العقد...',
+                  );
                 }
-                return FutureBuilder<Uint8List>(
-                  future: contractFileBytes,
-                  builder: (context, snapshot) {
-                    while (!snapshot.hasData) {
-                      return const CentralLoading();
-                    }
-                    return PdfPreview(
-                      allowSharing: false,
-                      dpi: 144,
-                      loadingWidget: const CentralLoading(),
-                      useActions: false,
-                      build: (context) {
-                        return snapshot.data!;
-                      },
-                    );
+                return PdfPreview(
+                  allowSharing: false,
+                  dpi: 144,
+                  loadingWidget: const CentralLoading(),
+                  useActions: false,
+                  build: (context) {
+                    return snapshot.data!;
                   },
                 );
               },

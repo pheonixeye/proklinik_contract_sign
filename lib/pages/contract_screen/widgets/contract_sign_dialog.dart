@@ -117,14 +117,23 @@ class _ContractSignDialogState extends State<ContractSignDialog> {
                   ),
                 ),
                 Expanded(
-                  child: ListTile(
-                    title: const Text('التوقيع'),
-                    subtitle: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 12.0,
-                        horizontal: 4,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 32.0),
+                    child: ListTile(
+                      title: Row(
+                        children: [
+                          const Text('التوقيع'),
+                          const Spacer(),
+                          IconButton.outlined(
+                            onPressed: () {
+                              _controller.clear();
+                            },
+                            icon: const Icon(Icons.refresh),
+                          ),
+                          const SizedBox(width: 10),
+                        ],
                       ),
-                      child: Signature(
+                      subtitle: Signature(
                         controller: _controller,
                       ),
                     ),
@@ -202,13 +211,6 @@ class _ContractSignDialogState extends State<ContractSignDialog> {
                         icon: const Icon(Icons.save),
                       ),
                       const SizedBox(height: 10),
-                      // ElevatedButton(
-                      //   onPressed: () async {
-                      //     final img = await _controller.toPngBytes();
-                      //     saveImg(img!, 'signature.png');
-                      //   },
-                      //   child: const Text('save sign'),
-                      // ),
                     ],
                   ),
                 ),

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class CentralLoading extends StatelessWidget {
-  const CentralLoading({super.key});
+  const CentralLoading({super.key, this.loadingText = 'جاري التحميل...'});
+  final String loadingText;
 
   @override
   Widget build(BuildContext context) {
@@ -22,13 +23,13 @@ class CentralLoading extends StatelessWidget {
           ],
         ),
         alignment: Alignment.center,
-        child: const Column(
+        child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CircularProgressIndicator(),
-            SizedBox(height: 10),
-            Text('جاري التحميل...')
+            const CircularProgressIndicator(),
+            const SizedBox(height: 10),
+            Text(loadingText)
           ],
         ),
       ),

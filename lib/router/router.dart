@@ -3,10 +3,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:proklinik_contract_sign/core/api/hx_contract.dart';
+import 'package:proklinik_contract_sign/core/api/hx_documents.dart';
 import 'package:proklinik_contract_sign/pages/contract_screen/contract_screen.dart';
+import 'package:proklinik_contract_sign/pages/document_screen/document_screen.dart';
 import 'package:proklinik_contract_sign/pages/loading_screen/loading_screen.dart';
 import 'package:proklinik_contract_sign/pages/thankyou_screen/thankyou_screen.dart';
 import 'package:proklinik_contract_sign/providers/px_contract_fetch.dart';
+import 'package:proklinik_contract_sign/providers/px_documents.dart';
 import 'package:proklinik_contract_sign/utils/utils_keys.dart';
 import 'package:provider/provider.dart';
 
@@ -14,7 +17,8 @@ class AppRouter {
   AppRouter();
 
   static const String loading = '/';
-  static const String contractId = ':id';
+  static const String contractId = 'contract/:id';
+  static const String documentId = 'document/:id';
   static const String thankYou = 'thankyou';
 }
 
@@ -50,22 +54,47 @@ final router = GoRouter(
             }
             return Scaffold(
               key: state.pageKey,
+              //TODO:
               body: const Center(
                 child: Text('خطأ'),
               ),
             );
           },
-          routes: [
-            GoRoute(
-              path: AppRouter.thankYou,
-              name: AppRouter.thankYou,
-              builder: (context, state) {
-                return ThankyouScreen(
+        ),
+        GoRoute(
+          path: AppRouter.documentId,
+          name: AppRouter.documentId,
+          builder: (context, state) {
+            final doc_id = state.pathParameters['id'];
+            if (doc_id != null && doc_id.isNotEmpty) {
+              final key = ValueKey(doc_id);
+              return ChangeNotifierProvider(
+                key: key,
+                create: (context) => PxDocuments(
+                  documentsService: HxDocuments(doc_id),
+                ),
+                child: DocumentScreen(
                   key: state.pageKey,
-                );
-              },
-            ),
-          ],
+                ),
+              );
+            }
+            return Scaffold(
+              key: state.pageKey,
+              //TODO:
+              body: const Center(
+                child: Text('خطأ'),
+              ),
+            );
+          },
+        ),
+        GoRoute(
+          path: AppRouter.thankYou,
+          name: AppRouter.thankYou,
+          builder: (context, state) {
+            return ThankyouScreen(
+              key: state.pageKey,
+            );
+          },
         ),
       ],
     ),

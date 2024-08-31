@@ -88,7 +88,9 @@ class _ContractPreviewPageState extends State<ContractPreviewPage> {
               context: context,
               builder: (context) {
                 loadingContext = context;
-                return const CentralLoading();
+                return const CentralLoading(
+                  loadingText: 'جاري تنسيق امضاء العقد...',
+                );
               },
             );
             //todo: modify contract pages

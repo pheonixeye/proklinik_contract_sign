@@ -6,7 +6,7 @@ import 'package:proklinik_contract_sign/providers/px_contract_fetch.dart';
 import 'package:proklinik_contract_sign/widgets/central_loading.dart';
 import 'package:provider/provider.dart';
 
-import 'dart:html' as html; // ignore: avoid_web_libraries_in_flutter
+import 'package:web/web.dart' as html; // ignore: avoid_web_libraries_in_flutter
 
 class SignedContractPreviewPage extends StatefulWidget {
   const SignedContractPreviewPage({super.key});

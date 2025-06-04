@@ -1,0 +1,4 @@
+.env
+.dart_tool
+temp_dir/
+build/
